@@ -1,0 +1,27 @@
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Build files
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+packages/
+
+# Local database files and backups
+*.mdf
+*.ldf
+*.ndf
+*.bak
+
+# Environment and secret files
+.env
+.env.*
+
+# Temporary files
+*.log
+*.tmp
+TestResults/

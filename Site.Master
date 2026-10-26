@@ -1,0 +1,470 @@
+﻿
+<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="Site.Master.cs"
+    Inherits="ExpenseTrackerFrontend.SiteMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+        <asp:ContentPlaceHolder ID="TitleContent" runat="server">
+            Expense Tracker
+        </asp:ContentPlaceHolder>
+    </title>
+
+    <link href="<%= ResolveUrl("~/Content/UserStyle.css") %>"
+          rel="stylesheet" type="text/css" />
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            background: #08090c;
+            color: #f2f4f8;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+        }
+
+        /* TOP NAVBAR */
+        .site-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 0 28px;
+            background: linear-gradient(
+                145deg, #343941 0%, #191c21 20%,
+                #0d0f12 50%, #20242a 80%, #444a53 100%
+            );
+            border-bottom: 1px solid #555b64;
+            box-shadow:
+                inset 0 -1px 0 rgba(255,255,255,.08),
+                0 6px 25px rgba(0,0,0,.75);
+        }
+
+        .site-logo {
+            text-decoration: none;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(0,234,255,.4);
+            white-space: nowrap;
+        }
+
+        .site-logo span {
+            color: #00eaff;
+            text-shadow: 0 0 8px rgba(0,234,255,.65),
+                         0 0 18px rgba(0,234,255,.25);
+        }
+
+        .site-top-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .site-user-text {
+            color: #a7adb5;
+            font-size: 13px;
+        }
+
+        .top-profile-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #e8eaed;
+            font-size: 13px;
+            font-weight: 600;
+            background: linear-gradient(
+                145deg, #5b616a, #282c32 30%,
+                #111318 60%, #4b515a
+            );
+            border: 1px solid #656b74;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,.25),
+                        inset 0 -2px 4px rgba(0,0,0,.8),
+                        0 4px 10px rgba(0,0,0,.6);
+            transition: .2s ease;
+        }
+
+        .top-profile-btn:hover {
+            color: #fff;
+            border-color: #00eaff;
+            box-shadow: 0 0 10px rgba(0,234,255,.45);
+        }
+
+        /* SIDEBAR */
+        .site-sidebar {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            bottom: 0;
+            width: 245px;
+            z-index: 900;
+            overflow-y: auto;
+            padding: 25px 16px;
+            background: linear-gradient(
+                180deg, #1a1d22 0%, #101216 35%, #08090c 100%
+            );
+            border-right: 1px solid #343941;
+            box-shadow: 8px 0 25px rgba(0,0,0,.35);
+        }
+
+        .sidebar-section-title {
+            padding: 0 11px;
+            margin: 0 0 12px;
+            color: #6f7680;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .side-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 13px;
+            margin-bottom: 7px;
+            border-radius: 9px;
+            color: #c8ccd1;
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid transparent;
+            background: linear-gradient(
+                145deg, rgba(70,75,84,.20), rgba(10,12,15,.20)
+            );
+            transition: .2s ease;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .side-link:hover {
+            color: #fff;
+            transform: translateX(3px);
+            background: linear-gradient(145deg, #343941, #121418);
+            border-color: #555b64;
+            box-shadow: 0 4px 10px rgba(0,0,0,.45);
+        }
+
+        .side-dot {
+            width: 7px;
+            height: 7px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #626872;
+        }
+
+        .side-link.cyan:hover {
+            border-color: #00eaff;
+            color: #00eaff;
+            box-shadow: 0 0 9px rgba(0,234,255,.35);
+        }
+
+        .side-link.cyan:hover .side-dot {
+            background: #00eaff;
+            box-shadow: 0 0 8px #00eaff;
+        }
+
+        .side-link.red:hover {
+            border-color: #ff3b6b;
+            color: #ff3b6b;
+            box-shadow: 0 0 9px rgba(255,59,107,.35);
+        }
+
+        .side-link.red:hover .side-dot {
+            background: #ff3b6b;
+            box-shadow: 0 0 8px #ff3b6b;
+        }
+
+        .side-link.green:hover {
+            border-color: #39ff88;
+            color: #39ff88;
+            box-shadow: 0 0 9px rgba(57,255,136,.35);
+        }
+
+        .side-link.green:hover .side-dot {
+            background: #39ff88;
+            box-shadow: 0 0 8px #39ff88;
+        }
+
+        .side-link.yellow:hover {
+            border-color: #ffd000;
+            color: #ffd000;
+            box-shadow: 0 0 9px rgba(255,208,0,.35);
+        }
+
+        .side-link.yellow:hover .side-dot {
+            background: #ffd000;
+            box-shadow: 0 0 8px #ffd000;
+        }
+
+        .side-link.purple:hover {
+            border-color: #b967ff;
+            color: #b967ff;
+            box-shadow: 0 0 9px rgba(185,103,255,.35);
+        }
+
+        .side-link.purple:hover .side-dot {
+            background: #b967ff;
+            box-shadow: 0 0 8px #b967ff;
+        }
+
+        .side-link.orange:hover {
+            border-color: #ff7a00;
+            color: #ff7a00;
+            box-shadow: 0 0 9px rgba(255,122,0,.35);
+        }
+
+        .side-link.orange:hover .side-dot {
+            background: #ff7a00;
+            box-shadow: 0 0 8px #ff7a00;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            margin: 22px 8px;
+            background: linear-gradient(
+                90deg, transparent, #3b4048, transparent
+            );
+        }
+
+        .side-link.logout {
+            color: #b8bcc2;
+            margin-top: 5px;
+            background-color: transparent;
+        }
+
+        .side-link.logout:hover {
+            color: #ff3b6b;
+            border-color: #ff3b6b;
+            box-shadow: 0 0 10px rgba(255,59,107,.35);
+        }
+
+        /* MAIN CONTENT */
+        .site-main {
+            display: block;
+            margin-left: 245px;
+            padding-top: 72px;
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 70% 10%,
+                    rgba(0,234,255,.045), transparent 28%
+                ),
+                radial-gradient(
+                    circle at 20% 85%,
+                    rgba(185,103,255,.035), transparent 30%
+                ),
+                #08090c;
+        }
+
+        .site-content {
+            display: block;
+            width: 100%;
+            max-width: 1500px;
+            min-height: calc(100vh - 72px);
+            margin: 0 auto;
+            padding: 38px;
+            color: #f2f4f8;
+        }
+
+        /* MOBILE */
+        @media (max-width: 850px) {
+            .site-sidebar {
+                width: 205px;
+            }
+
+            .site-main {
+                margin-left: 205px;
+            }
+
+            .site-content {
+                padding: 25px 20px;
+            }
+
+            .site-user-text {
+                display: none;
+            }
+
+            .site-logo {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .site-sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .site-main {
+                margin-left: 70px;
+            }
+
+            .site-content {
+                padding: 20px 15px;
+            }
+
+            .sidebar-section-title {
+                display: none;
+            }
+
+            .side-link {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .side-link span:not(.side-dot) {
+                display: none;
+            }
+
+            .side-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .site-topbar {
+                padding: 0 12px;
+            }
+
+            .site-logo {
+                font-size: 15px;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+    <!-- TOP BAR -->
+    <header class="site-topbar">
+        <a href="<%= ResolveUrl("~/User/Dashboard.aspx") %>"
+           class="site-logo">
+            EXPENSE<span>TRACKER</span>
+        </a>
+
+        <div class="site-top-actions">
+            <span class="site-user-text">
+                Personal Finance Manager
+            </span>
+
+            <a href="<%= ResolveUrl("~/User/Profile.aspx") %>"
+               class="top-profile-btn">
+                Profile
+            </a>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="site-sidebar">
+
+        <div class="sidebar-section-title">Main Menu</div>
+
+        <a href="<%= ResolveUrl("~/User/Dashboard.aspx") %>"
+           class="side-link cyan">
+            <span class="side-dot"></span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="<%= ResolveUrl("~/User/AddExpense.aspx") %>"
+           class="side-link red">
+            <span class="side-dot"></span>
+            <span>Add Expense</span>
+        </a>
+
+        <a href="<%= ResolveUrl("~/User/AddIncome.aspx") %>"
+           class="side-link green">
+            <span class="side-dot"></span>
+            <span>Add Income</span>
+        </a>
+
+        <a href="<%= ResolveUrl("~/User/Transactions.aspx") %>"
+           class="side-link cyan">
+            <span class="side-dot"></span>
+            <span>Transactions</span>
+        </a>
+
+        <a href="<%= ResolveUrl("~/User/Budgets.aspx") %>"
+           class="side-link yellow">
+            <span class="side-dot"></span>
+            <span>Budgets</span>
+        </a>
+
+        <a href="<%= ResolveUrl("~/User/Reports.aspx") %>"
+           class="side-link purple">
+            <span class="side-dot"></span>
+            <span>Reports</span>
+        </a>
+
+        <a href="<%= ResolveUrl("~/User/SplitExpenses.aspx") %>"
+           class="side-link orange">
+            <span class="side-dot"></span>
+            <span>Split Expenses</span>
+        </a>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section-title">Account</div>
+
+        <a href="<%= ResolveUrl("~/User/Profile.aspx") %>"
+           class="side-link cyan">
+            <span class="side-dot"></span>
+            <span>Profile</span>
+        </a>
+
+        <asp:LinkButton ID="btnLogout"
+            runat="server"
+            CssClass="side-link logout"
+            OnClick="btnLogout_Click"
+            CausesValidation="false">
+            <span class="side-dot"></span>
+            <span>Logout</span>
+        </asp:LinkButton>
+
+    </aside>
+
+    <!-- MAIN CONTENT: OUTSIDE THE SIDEBAR -->
+    <main class="site-main">
+        <div class="site-content">
+
+            <asp:ContentPlaceHolder
+                ID="MainContent"
+                runat="server">
+            </asp:ContentPlaceHolder>
+
+        </div>
+    </main>
+
+</form>
+</body>
+</html>

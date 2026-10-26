@@ -1,0 +1,198 @@
+
+<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="AdminMaster.master.cs"
+    Inherits="ExpenseTrackerFrontend.Admin.AdminMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>ExpenseTracker Admin</title>
+
+    <link href="<%= ResolveUrl("~/CSS/style.css") %>"
+          rel="stylesheet"
+          type="text/css" />
+
+    <style>
+        /* BACK TO CLIENT SIDE */
+        .client-side-item {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,.12);
+        }
+
+        .client-side-link {
+            display: block;
+            margin: 8px 10px;
+            padding: 12px 10px;
+            border: 1px solid #00cfe8;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff !important;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: .3px;
+            background: linear-gradient(
+                145deg,
+                #454c56 0%,
+                #252a32 35%,
+                #101318 70%,
+                #39414b 100%
+            );
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,.2),
+                inset 0 -2px 3px rgba(0,0,0,.6),
+                0 4px 10px rgba(0,0,0,.4);
+            transition: .2s ease;
+        }
+
+        .client-side-link:hover {
+            color: #00eaff !important;
+            border-color: #00eaff;
+            transform: translateY(-1px);
+            box-shadow:
+                0 0 12px rgba(0,234,255,.3),
+                inset 0 1px 0 rgba(255,255,255,.15);
+        }
+
+        /* LOGOUT BUTTON */
+        .admin-logout-button {
+            display: block;
+            width: 100%;
+            padding: 10px 8px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .admin-logout-button:hover {
+            color: #ff657d;
+            border-color: rgba(255,101,125,.45);
+            background: rgba(255,101,125,.07);
+        }
+    </style>
+
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <div class="app-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="logo">
+                <h1>
+                    ADMIN<span> PANEL</span>
+                </h1>
+            </div>
+
+            <div class="menu-title">
+                Administration
+            </div>
+
+            <ul class="nav-menu">
+
+                <li>
+                    <a href="<%= ResolveUrl("~/Admin/AdminDashboard.aspx") %>">
+                        ⌂ &nbsp; Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="<%= ResolveUrl("~/Admin/Users.aspx") %>">
+                        ◉ &nbsp; Users
+                    </a>
+                </li>
+
+                <li>
+                    <a href="<%= ResolveUrl("~/Admin/Transactions.aspx") %>">
+                        ▤ &nbsp; Transactions
+                    </a>
+                </li>
+
+            </ul>
+
+            <br />
+
+            <div class="menu-title">
+                Account
+            </div>
+
+            <ul class="nav-menu">
+
+                <!-- LOGOUT -->
+                <li>
+                    <asp:LinkButton
+                        ID="btnAdminLogout"
+                        runat="server"
+                        CssClass="logout-link admin-logout-button"
+                        OnClick="btnAdminLogout_Click"
+                        CausesValidation="false">
+                        ⇥ &nbsp; Logout
+                    </asp:LinkButton>
+                </li>
+
+                <!-- BACK TO USER / CLIENT SIDE -->
+                <li class="client-side-item">
+                    <a href="<%= ResolveUrl("~/User/Register.aspx") %>"
+                       class="client-side-link">
+                        ← Back to Client Side
+                    </a>
+                </li>
+
+            </ul>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div class="page-title">
+                    Administration Panel
+                </div>
+
+                <div class="profile-area">
+
+                    <span>Administrator</span>
+
+                    <div class="profile-circle">
+                        A
+                    </div>
+
+                </div>
+
+            </header>
+
+            <section class="page-container">
+
+                <asp:ContentPlaceHolder
+                    ID="MainContent"
+                    runat="server">
+                </asp:ContentPlaceHolder>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</form>
+
+</body>
+</html>
